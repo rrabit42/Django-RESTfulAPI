@@ -8,6 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email')
 
+
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
