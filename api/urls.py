@@ -15,6 +15,7 @@ router.register(r'groups', views.GroupViewSet)  # http://127.0.0.1:8000/groups/ 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('practice.urls')),
-    path('', include(router.urls)),
+    # path('', include(router.urls)),
+    path('', include('snippets.urls')),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
