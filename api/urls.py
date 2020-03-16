@@ -13,9 +13,9 @@ router.register(r'groups', views.GroupViewSet)  # http://127.0.0.1:8000/groups/ 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), # namespace가 반드시 `rest_framework`
     path('admin/', admin.site.urls),
     path('api/', include('practice.urls')),
     # path('', include(router.urls)),
     path('', include('snippets.urls')),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
