@@ -1,5 +1,8 @@
 from django.contrib.auth.models import User
-from rest_framework import status, mixins, generics, permissions
+from rest_framework import status, mixins, generics, permissions, renderers
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from snippets.models import Snippet
 from snippets.permissions import IsOwnerOrReadOnly
@@ -30,3 +33,24 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+@api_view(('GET', ))
+def api_root(request, format=None):
+    return Response({
+        # url 만드는데 reverse 함수 사용
+        'users': reverse('user-list', request=request, format=format),
+        'snippets': reverse('snippet-list', request=request, format=format)
+    })
+
+
+class SnippetHighlight(generics.GenericAPIView):
+    # Rest 프레임워크에서 HTML로 렌더링하는 방식은 두가지가 있음
+    # 1. 템플릿 사용
+    # 2. 미리 렌더링된 HTML 사용(우리가 할 것)
+    queryset = Snippet.objects.all()
+    renderer_classes = (renderers.StaticHTMLRenderer,)
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
